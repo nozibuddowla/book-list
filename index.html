@@ -15,18 +15,18 @@
     <div class="form-container">
         <form id="book-form">
             <div class="mb-3">
-                <label for="title" class="form-label book-author">Title</label>
-                <input type="text" id="title" class="form-control book-author">
+                <label for="title" class="form-label book-title">Title</label>
+                <input type="text" id="title" class="form-control book-title" required>
             </div>
             <div class="mb-3">
-                <label for="author" class="form-label book-title">Author</label>
-                <input type="text" id="author" class="form-control book-title">
+                <label for="author" class="form-label book-author">Author</label>
+                <input type="text" id="author" class="form-control book-author" required>
             </div>
             <div class="mb-3">
                 <label for="publisher" class="form-label book-publisher">Publisher</label>
-                <input type="text" id="publisher" class="form-control book-publisher">
+                <input type="text" id="publisher" class="form-control book-publisher" required>
             </div>
-            <button type="submit" class="btn btn-primar btn-blocky">Add Book</button>
+            <button type="submit" class="btn btn-primary btn-submit">Add Book</button>
         </form>
 
         <table class="table table-hover table-hover-margin">
@@ -39,7 +39,7 @@
                 </tr>
             </thead>
             <tbody id="book-list">
-
+                <a href=""></a>
             </tbody>
         </table>
     </div>
