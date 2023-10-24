@@ -14,20 +14,24 @@ class Book {
     }
 }
 
+// UI Class: Handle UI Tasks
 class UI {
     static addBookToList(book) {
-        const list = document.querySelector('#book-list');
 
-        const row = document.createElement('tr');
+        if (bookList) {
+            const row = document.createElement('tr');
 
-        row.classList.add('book-active');
-        row.innerHTML = `
-        <td>${book.title}</td>
-        <td>${book.author}</td>
-        <td>${book.publisher}</td>
-        <td class="delete-btn"><a data-id="${book.id}" class='btn btn-danger btn-sm delete' href="#">X</a></td>
-        `;
-        list.appendChild(row);
+            row.classList.add('book-active');
+            row.innerHTML = `
+            <td>${book.title}</td>
+            <td>${book.author}</td>
+            <td>${book.publisher}</td>
+            <td class="delete-btn"><a data-id="${book.id}" class='btn btn-danger btn-sm delete' href="#">X</a></td>
+            `;
+            bookList.appendChild(row);
+        } else {
+            console.error('The #book-list element does not exist in the DOM.');
+        }
     }
 
     static clearFields() {
@@ -38,6 +42,9 @@ class UI {
         if (el.classList.contains('delete')) {
             el.parentElement.parentElement.remove();
         }
+
+        // Show remove message
+        UI.showAlert('Book Removed', 'bg-danger');
     }
 
     static displayBooks() {
@@ -45,6 +52,20 @@ class UI {
         books.forEach(book => {
             UI.addBookToList(book);
         });
+    }
+
+    static showAlert(message, className) {
+        const div = document.createElement('div');
+        div.className = `alert ${className}`;
+        div.appendChild(document.createTextNode(message));
+
+        const container = document.querySelector('.form-container');
+        container.insertBefore(div, form);
+
+        // Vanish in 3 seconds
+        setTimeout(() => {
+            div.remove();
+        }, 3000);
     }
 }
 
@@ -64,8 +85,10 @@ class Store {
         const books = Store.getBooks();
         book.id = generateUniqueId(); // Implement a function to generate unique IDs
         books.push(book);
-        deleteList.disabled = false;
         localStorage.setItem('books', JSON.stringify(books));
+
+        // Enable the deleteList button
+        deleteList.disabled = false;
     }
 
     static removeBook (id) {
@@ -83,10 +106,13 @@ class Store {
 
 
 // Add Event Listener
-form.addEventListener('submit', newBook);
-bookList.addEventListener('click', removeBook);
-document.addEventListener('DOMContentLoaded', UI.displayBooks);
-deleteList.addEventListener('click', deleteBooksList);
+document.addEventListener('DOMContentLoaded', () => {
+    UI.displayBooks();
+    form.addEventListener('submit', newBook);
+    bookList.addEventListener('click', removeBook);
+    deleteList.addEventListener('click', deleteBooksList);
+});
+
 
 
 // Define function
@@ -110,6 +136,9 @@ function newBook(e) {
 
     // Save book to local Storage
     Store.addBook(book);
+
+    // Show success message
+    UI.showAlert('Book Added', 'bg-success');
 }
 
 function removeBook(e) {
