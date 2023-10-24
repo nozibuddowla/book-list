@@ -16,8 +16,14 @@ class Book {
 
 // UI Class: Handle UI Tasks
 class UI {
-    static addBookToList(book) {
+    static displayBooks() {
+        const books = Store.getBooks();
+        books.forEach(book => {
+            UI.addBookToList(book);
+        });
+    }
 
+    static addBookToList(book) {
         if (bookList) {
             const row = document.createElement('tr');
 
@@ -33,11 +39,6 @@ class UI {
             console.error('The #book-list element does not exist in the DOM.');
         }
     }
-
-    static clearFields() {
-        document.querySelector('#book-form').reset();
-    }
-
     static deleteBook(el) {
         if (el.classList.contains('delete')) {
             el.parentElement.parentElement.remove();
@@ -47,11 +48,8 @@ class UI {
         UI.showAlert('Book Removed', 'bg-danger');
     }
 
-    static displayBooks() {
-        const books = Store.getBooks();
-        books.forEach(book => {
-            UI.addBookToList(book);
-        });
+    static clearFields() {
+        document.querySelector('#book-form').reset();
     }
 
     static showAlert(message, className) {
@@ -104,7 +102,6 @@ class Store {
     }
 }
 
-
 // Add Event Listener
 document.addEventListener('DOMContentLoaded', () => {
     UI.displayBooks();
@@ -112,8 +109,6 @@ document.addEventListener('DOMContentLoaded', () => {
     bookList.addEventListener('click', removeBook);
     deleteList.addEventListener('click', deleteBooksList);
 });
-
-
 
 // Define function
 function newBook(e) {
@@ -152,6 +147,7 @@ function removeBook(e) {
 function deleteBooksList() {
     bookList.parentNode.removeChild(bookList);
     deleteList.disabled = true;
+    UI.showAlert('All the books removed', 'bg-danger');
     localStorage.removeItem('books');
 }
 
